@@ -1,0 +1,23 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Loading dataset
+df = pd.read_excel('online_retail_dataset.xlsx')
+df.dropna(axis=0,how="any")
+df.info()
+duplicate_rows = df[df.duplicated(keep="last")]
+print(f"the duplicated rows are as follows: {duplicate_rows}")
+
+df.isnull().sum()
+df.dropna(subset=['Customer ID'], inplace=True)
+df.drop(df[df['Price'] == 0].index)
+df.drop_duplicates()
+
+df['Total Price'] = df['Quantity']* df['Price']
+df.groupby('Description')
+
+df
+countries = df.groupby('Country')['Total Price'].sum()
+sorted = countries.sort_values(ascending=False)
+sorted[:5].plot(kind='bar', color='gray')
+df.groupby('Customer ID')['Total Price'].sum().sort_values(ascending = False).iloc[:5].plot(kind='bar' ,color='gray')
